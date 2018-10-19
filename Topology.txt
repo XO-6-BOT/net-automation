@@ -1,0 +1,71 @@
+
++--------------------------------------------------------------------------------------+
+| This topology is created by Andrey Ptashnik for Network Automation Class by ipSpace  |
+| In order to run live topology you will need:                                         |
+|  - VIRL 1.5                                                                          |
+|  - Cisco NX-OSv 7.0(3)I7(1)                                                          |
+|  - Each NX-OSv node was adjusted to 4 vCPUs and 8 GB RAM                             |
+|  - Dcevice configurations will be saved in the same .virl topology file which is     |
+|    plain text. You will need only a single file to start live topology.              |
++--------------------------------------------------------------------------------------+
+
+
+
+This topology will OSPF as a link state protocol for both data centers.
+Leaf switches are united in vPC.
+VXLAN with EVPN MP-BGP is implemented as overlay protocol in both data centers.
+DC Interconnect will be implemented based on VXLAN.
+
+
+
+    +------------+                            +---------------+                           +---------------+                             +------------+
+    | DC1-BGW1   |----------------------------| DC1-WAN-Edge1 |---\                   /---| DC2-WAN-Edge2 |-----------------------------| DC2-BGW2   | 
+    +------------+                            +---------------+    \+---------------+/    +---------------+                             +------------+
+          |        \                                                |    WAN        |                                                  /      |
+          |         \   ___+-----------+      +---------------+    /+---------------+\    +---------------+      +------------+__     /       |
+          |          \ /   | DC1-BGW2  |------| DC1-WAN-Edge2 |---/                   \---| DC2-WAN-Edge2 |------| DC1-BGW1   |  \   /        |
+          |           X    +-----------+      +---------------+                           +---------------+      +------------+   \ /         |
+          |          / \         |                                                                                     |           X          |
+          |         /   \        |                                                                                     |          / \         |     
+          |        /     \       |                                                                                     |         /   \        |
+    +------------+         +-----------+      |<---------------------WAN BACKBONE------------------------>|      +------------+         +-----------+
+    | DC1-Spine1 |         | DC1-Leaf2 |                                                                         | DC1-Spine1 |         | DC1-Leaf2 |
+    +------------+         +-----------+                                                                         +------------+         +-----------+
+          |        \     /       |                                                                                     |        \     /       |      
+          |         \   /        |                                                                                     |         \   /        |      
+          |          \ /         |                                                                                     |          \ /         |      
+          |           X          |                                                                                     |           X          |      
+          |          / \         |                                                                                     |          / \         |      
+          |         /   \        |                                                                                     |         /   \        |       
+          |        /     \       |                                                                                     |        /     \       |      
+    +------------+ <-----> +-----------+                                                                         +------------+ <-----> +-----------+
+    | DC1-Leaf1  |   vPC   | DC1-Leaf2 |                                                                         | DC1-Leaf1  |   vPC   | DC1-Leaf2 |
+    +------------+ <-----> +-----------+                                                                         +------------+ <-----> +-----------+ 
+
+Management interfaces from each device will be connected to FLAT network 172.16.1.0/24
+
+Data Center Fabric MGMT Interfaces:
+DC1-Leaf1     172.16.1.103
+DC1-Leaf2     172.16.1.104
+DC1-Spine1    172.16.1.101
+DC1-Spine2    172.16.1.102
+DC1-BGW1      172.16.1.105
+DC1-BGW2      172.16.1.106
+
+DC2-Leaf1     172.16.1.109
+DC2-Leaf2     172.16.1.110
+DC2-Spine1    172.16.1.107
+DC2-Spine2    172.16.1.108
+DC2-BGW1      172.16.1.111
+DC2-BGW2      172.16.1.112
+
+WAN Backbone Router MGMT Interfaces:
+WAN-1         172.16.1.121
+WAN-2         172.16.1.122
+DC1-WAN-Edge1 172.16.1.123
+DC1-WAN-Edge2 172.16.1.124
+DC2-WAN-Edge1 172.16.1.125
+DC2-WAN-Edge2 172.16.1.126
+
+
+
